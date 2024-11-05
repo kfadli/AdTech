@@ -21,4 +21,4 @@ dependencyResolutionManagement {
 
 rootProject.name = "AdTech"
 include(":app")
- 
+include(":sdk")
