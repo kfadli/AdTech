@@ -10,6 +10,9 @@ activityCompose = "1.9.3"
 composeBom = "2024.10.01"
 ktorBom = "3.0.1"
 timber = "5.0.1"
+koinBom = "4.0.0"
+coil = "2.7.0"
+volley = "1.2.1"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -35,12 +38,26 @@ ktor-client-core = { group = "io.ktor", name = "ktor-client-core" }
 ktor-client-cio = { group = "io.ktor", name = "ktor-client-cio" }
 ktor-client-logging = { group = "io.ktor", name = "ktor-client-logging" }
 
+#koin
+koin-android = { module = "io.insert-koin:koin-android" }
+koin-android-test = { module = "io.insert-koin:koin-android-test" }
+koin-bom = { module = "io.insert-koin:koin-bom", version.ref = "koinBom" }
+koin-compose-viewmodel = { module = "io.insert-koin:koin-compose-viewmodel" }
+koin-core-coroutines = { module = "io.insert-koin:koin-core-coroutines" }
+koin-core-viewmodel = { module = "io.insert-koin:koin-core-viewmodel" }
+koin-test-junit4 = { module = "io.insert-koin:koin-test-junit4" }
+
 #timber
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
+#coil
+coil = { module = "io.coil-kt:coil-compose", version.ref = "coil" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+kotlinx-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
