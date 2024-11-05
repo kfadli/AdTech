@@ -1,13 +1,14 @@
 package com.voodoo.sdk.internal.network.response
 
 import kotlinx.serialization.SerialName
-import kotlin.time.Duration
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class AdResponse(
     @SerialName("static")
     val adUrl: String,
     @SerialName("close_delay")
-    val duration: Duration,
+    val duration: Long,
     @SerialName("tracking")
     val trackingURl: String,
     @SerialName("clickthrough")
