@@ -5,6 +5,7 @@ import com.voodoo.sdk.internal.network.ClientApiFactory
 import com.voodoo.sdk.internal.repository.AdRepository
 import com.voodoo.sdk.internal.repository.Repository
 import com.voodoo.sdk.model.AdState
+import com.voodoo.sdk.model.TrackEvent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.serialization.json.Json
@@ -12,7 +13,7 @@ import kotlinx.serialization.json.Json
 private const val ADVERTISEMENT_API_URL =
     "https://voodoo-adn-framework.s3.eu-west-1.amazonaws.com/test/ad.json"
 
-object SDKVoodoo : SDKFacade {
+class SDKVoodoo : SDKFacade {
 
     private var uuid: String? = null
     private var instance: Repository? = null
@@ -50,4 +51,10 @@ object SDKVoodoo : SDKFacade {
         instance?.loadAdvertisement()
             ?: throw IllegalStateException("SDK has not been initialized, please call configure() first")
     }
+
+    override suspend fun trackEvent(trackerUrl: String, event: TrackEvent): Result<Unit> =
+        instance?.trackEvent(
+            trackerUrl = trackerUrl,
+            event = event
+        ) ?: throw IllegalStateException("SDK has not been initialized, please call configure() first")
 }

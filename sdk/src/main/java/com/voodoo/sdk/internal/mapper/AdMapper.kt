@@ -8,5 +8,6 @@ import kotlin.time.toDuration
 fun AdResponse.toAddData() = AdData(
     url = adUrl,
     duration = duration.toDuration(DurationUnit.SECONDS),
-    target = target
+    target = target,
+    trackerUrl = trackingURl
 )

@@ -3,6 +3,7 @@ package com.voodoo.sdk.internal.repository
 import com.voodoo.sdk.internal.datasource.ApiDataSource
 import com.voodoo.sdk.internal.mapper.toAddData
 import com.voodoo.sdk.model.AdState
+import com.voodoo.sdk.model.TrackEvent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
@@ -34,6 +35,12 @@ class AdRepository(
                     emit(AdState.Error(error))
                 }
         }.flowOn(dispatcher)
+    }
+
+    override suspend fun trackEvent(trackerUrl: String, event: TrackEvent): Result<Unit> {
+        Timber.v("[trackEvent] event: $event")
+
+        return api.postTrackEvent(url = trackerUrl, event = event)
     }
 
 }

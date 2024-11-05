@@ -4,7 +4,6 @@ import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -27,9 +26,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import com.voodoo.sdk.SDKVoodoo
 import com.voodoo.sdk.model.AdData
 import com.voodoo.sdk.model.AdState
+import com.voodoo.sdk.model.TrackEvent
 import kotlinx.coroutines.delay
+import org.koin.compose.getKoin
 import kotlin.time.DurationUnit
 
 
@@ -38,27 +40,43 @@ fun AdPopup(
     adState: AdState,
     onDismiss: () -> Unit = {},
     onClick: () -> Unit = {},
-) = Box(
-    contentAlignment = Alignment.TopEnd,
-    modifier = Modifier
-        .fillMaxSize()
-        .background(Color.Cyan)
-        .clickable { onClick() }
-) {
-    when (adState) {
-        is AdState.Loaded -> {
-            OnAdDataAvailable(
-                onDismiss = onDismiss,
-                data = adState.data
-            )
-        }
+    ) {
+    Box(
+        contentAlignment = Alignment.TopEnd,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Cyan)
+            .clickable { onClick() }
+    ) {
+        when (adState) {
+            is AdState.Loaded -> {
+                OnAdDataAvailable(
+                    onDismiss = onDismiss,
+                    data = adState.data
+                )
 
-        is AdState.Error -> {
-            Text(adState.throwable.message ?: "Unknown failure")
-        }
+                TrackEvent(adState.data, TrackEvent.Load)
+            }
 
-        AdState.Loading -> CircularProgressIndicator()
-        else -> {}
+            is AdState.Error -> {
+                Text(adState.throwable.message ?: "Unknown failure")
+            }
+
+            AdState.Loading -> CircularProgressIndicator()
+            else -> {}
+        }
+    }
+}
+
+@Composable
+fun TrackEvent(data: AdData, event: TrackEvent) {
+    val tracking = getKoin().get<SDKVoodoo>()
+
+    LaunchedEffect(Unit) {
+        tracking.trackEvent(
+            trackerUrl = data.trackerUrl,
+            event = event
+        )
     }
 }
 
@@ -85,7 +103,7 @@ fun OnAdDataAvailable(data: AdData, onDismiss: () -> Unit) {
 
         if (isExpired)
             OutlinedIconButton(
-                onClick = onDismiss,
+                onClick = { onDismiss() },
                 modifier = Modifier
                     .padding(16.dp)
                     .clip(CircleShape)
@@ -100,6 +118,7 @@ fun OnAdDataAvailable(data: AdData, onDismiss: () -> Unit) {
                 )
             }
     } else {
+        TrackEvent(data, TrackEvent.Click)
         AdWebView(data.target)
     }
 }
