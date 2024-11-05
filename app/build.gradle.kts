@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.voodoo.adtech"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.voodoo.adtech"
