@@ -33,6 +33,13 @@ android {
 }
 
 dependencies {
+    implementation(platform(libs.ktorBom))
+    implementation(libs.ktor.client.negociation)
+    implementation(libs.ktor.client.core)
+    implementation(libs.ktor.client.cio)
+    implementation(libs.ktor.serialization)
+    implementation(libs.ktor.client.logging)
     implementation(libs.androidx.core.ktx)
+    implementation(libs.timber)
     testImplementation(libs.junit)
 }
