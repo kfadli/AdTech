@@ -1,4 +1,4 @@
-package com.voodoo.sdk.response
+package com.voodoo.sdk.internal.network.response
 
 import kotlinx.serialization.SerialName
 import kotlin.time.Duration

@@ -1,8 +1,8 @@
 package com.voodoo.sdk.internal.datasource
 
 import com.voodoo.sdk.model.TrackEvent
-import com.voodoo.sdk.response.AdResponse
-import com.voodoo.sdk.response.TrackBody
+import com.voodoo.sdk.internal.network.response.AdResponse
+import com.voodoo.sdk.internal.network.response.TrackBody
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.get
