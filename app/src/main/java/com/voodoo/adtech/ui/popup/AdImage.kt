@@ -12,7 +12,8 @@ import coil.request.ImageRequest
 fun AdImage(
     imageUrl: String,
     contentDescription: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onSuccess: () -> Unit
 ) {
     AsyncImage(
         modifier = Modifier.clickable { onClick() },
@@ -23,6 +24,7 @@ fun AdImage(
             .build(),
         contentDescription = contentDescription,
         contentScale = ContentScale.FillBounds,
+        onSuccess = { onSuccess() }
     )
 
 }

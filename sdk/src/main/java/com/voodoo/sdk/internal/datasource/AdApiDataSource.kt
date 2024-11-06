@@ -11,7 +11,7 @@ import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
 import io.ktor.http.contentType
 
-class AdApiDataSource(
+internal class AdApiDataSource(
     private val clientApi: HttpClient,
 ) : ApiDataSource {
 
@@ -19,10 +19,10 @@ class AdApiDataSource(
         clientApi.get<AdResponse>(url = url)
     }
 
-    override suspend fun postTrackEvent(url: String, event: TrackEvent): Result<Unit> =
+    override suspend fun headTrackEvent(url: String, event: String): Result<Unit> =
         runCatching {
-            clientApi.head(urlString = url) {
-                setBody(TrackBody(event = event))
+            clientApi.head(urlString = url.plus("?name=$event")) {
+                contentType(ContentType.Application.Json)
             }
         }
 }

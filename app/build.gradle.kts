@@ -47,14 +47,13 @@ dependencies {
     implementation(libs.koin.core.viewmodel)
     implementation(libs.koin.compose.viewmodel)
     implementation(libs.timber)
+
+    implementation(libs.coil)
     implementation(libs.volley)
     testImplementation(libs.koin.test.junit4)
     testImplementation(libs.koin.android.test)
 
     implementation(project(":sdk"))
-    implementation(libs.coil)
-
-    implementation(libs.timber)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

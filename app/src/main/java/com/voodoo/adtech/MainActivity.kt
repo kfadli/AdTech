@@ -12,15 +12,18 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import com.voodoo.adtech.ui.screen.Home
 import com.voodoo.adtech.ui.theme.VoodooTheme
+import org.koin.compose.KoinContext
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            VoodooTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    Home(modifier = Modifier.padding(innerPadding))
+            KoinContext {
+                VoodooTheme {
+                    Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
+                        Home(modifier = Modifier.padding(innerPadding))
+                    }
                 }
             }
         }

@@ -41,7 +41,8 @@ dependencies {
     implementation(libs.ktor.serialization)
     implementation(libs.ktor.client.logging)
     implementation(libs.androidx.core.ktx)
-
+    implementation(libs.coil)
+    implementation(libs.volley)
 
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))

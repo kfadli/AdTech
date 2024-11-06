@@ -1,5 +1,7 @@
 package com.voodoo.sdk.internal.network.response
 
-import com.voodoo.sdk.model.TrackEvent
+import kotlinx.serialization.Serializable
 
-data class TrackBody(val event: TrackEvent)
+
+@Serializable
+internal data class TrackBody(val event: String)

@@ -8,7 +8,7 @@ import kotlin.math.sin
 
 val appModule = module {
 
-    single { SDKVoodoo() }
+    single { SDKVoodoo }
     viewModel { HomeViewModel(get()) }
 
 }

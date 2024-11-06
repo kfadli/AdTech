@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class AdResponse(
+internal data class AdResponse(
     @SerialName("static")
     val adUrl: String,
     @SerialName("close_delay")

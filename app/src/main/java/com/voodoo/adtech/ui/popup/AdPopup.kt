@@ -31,7 +31,6 @@ import com.voodoo.sdk.model.AdData
 import com.voodoo.sdk.model.AdState
 import com.voodoo.sdk.model.TrackEvent
 import kotlinx.coroutines.delay
-import org.koin.compose.getKoin
 import kotlin.time.DurationUnit
 
 
@@ -40,12 +39,12 @@ fun AdPopup(
     adState: AdState,
     onDismiss: () -> Unit = {},
     onClick: () -> Unit = {},
-    ) {
+) {
+
     Box(
         contentAlignment = Alignment.TopEnd,
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Cyan)
             .clickable { onClick() }
     ) {
         when (adState) {
@@ -54,14 +53,9 @@ fun AdPopup(
                     onDismiss = onDismiss,
                     data = adState.data
                 )
-
-                TrackEvent(adState.data, TrackEvent.Load)
             }
 
-            is AdState.Error -> {
-                Text(adState.throwable.message ?: "Unknown failure")
-            }
-
+            is AdState.Error -> Text(adState.throwable.message ?: "Unknown failure")
             AdState.Loading -> CircularProgressIndicator()
             else -> {}
         }
@@ -70,10 +64,8 @@ fun AdPopup(
 
 @Composable
 fun TrackEvent(data: AdData, event: TrackEvent) {
-    val tracking = getKoin().get<SDKVoodoo>()
-
-    LaunchedEffect(Unit) {
-        tracking.trackEvent(
+    LaunchedEffect(event) {
+        SDKVoodoo.trackEvent(
             trackerUrl = data.trackerUrl,
             event = event
         )
@@ -84,7 +76,7 @@ fun TrackEvent(data: AdData, event: TrackEvent) {
 fun OnAdDataAvailable(data: AdData, onDismiss: () -> Unit) {
     var timeLeft by remember { mutableIntStateOf(data.duration.toInt(DurationUnit.SECONDS)) }
     var isExpired by remember { mutableStateOf(false) }
-    var redirect by remember { mutableStateOf(false) }
+    var adStatus by remember { mutableStateOf<TrackEvent>(TrackEvent.Load) }
 
     LaunchedEffect(key1 = Unit) {
         while (timeLeft > 0) {
@@ -94,31 +86,35 @@ fun OnAdDataAvailable(data: AdData, onDismiss: () -> Unit) {
         isExpired = true
     }
 
-    if (!redirect) {
-        AdImage(
-            imageUrl = data.url,
-            contentDescription = "Advertisement",
-            onClick = { redirect = true }
-        )
+    TrackEvent(data, adStatus)
 
-        if (isExpired)
-            OutlinedIconButton(
-                onClick = { onDismiss() },
-                modifier = Modifier
-                    .padding(16.dp)
-                    .clip(CircleShape)
-                    .size(32.dp)
-                    .background(Color.Black),
-                border = BorderStroke(2.5.dp, Color.Black)
-            ) {
+    when (adStatus) {
+        TrackEvent.Click -> AdWebView(data.target)
+        TrackEvent.Close -> onDismiss()
+        else -> {
+            AdImage(
+                imageUrl = data.url,
+                contentDescription = "Advertisement",
+                onClick = { adStatus = TrackEvent.Click },
+                onSuccess = { adStatus = TrackEvent.Open }
+            )
 
-                Icon(
-                    imageVector = Icons.Outlined.Close,
-                    contentDescription = "Close",
-                )
-            }
-    } else {
-        TrackEvent(data, TrackEvent.Click)
-        AdWebView(data.target)
+            if (isExpired)
+                OutlinedIconButton(
+                    onClick = { adStatus = TrackEvent.Close },
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .clip(CircleShape)
+                        .size(32.dp)
+                        .background(Color.Black),
+                    border = BorderStroke(2.5.dp, Color.Black)
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Close,
+                        contentDescription = "Close",
+                    )
+                }
+        }
     }
+
 }

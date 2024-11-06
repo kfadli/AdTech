@@ -13,7 +13,7 @@ import kotlinx.serialization.json.Json
 private const val ADVERTISEMENT_API_URL =
     "https://voodoo-adn-framework.s3.eu-west-1.amazonaws.com/test/ad.json"
 
-class SDKVoodoo : SDKFacade {
+object SDKVoodoo : SDKFacade {
 
     private var uuid: String? = null
     private var instance: Repository? = null
